@@ -16,25 +16,13 @@ namespace Delegates
         {
             string[] names = { "Alice", "John", "Bobby", "Kyle", "Scott", "Tod", "Sharon", "Armin", "George" };
 
-            List<string> lessThanFiveChars = NamesFilter(names, LessThanFive);
+            List<string> lessThanFiveChars = NamesFilter(names, item => item.Length == 5); // We dont need method, we can just use a lambda expression here!
 
             Console.WriteLine(string.Join(", ", lessThanFiveChars));
         }
 
         // Now we have three different methods with three different conditions. Delegate should allow us to store these variables and pass them around.
-        public static bool LessThanFive(string name)
-        {
-            return name.Length < 5;
-        }
-        public static bool MoreThanFive(string name)
-        {
-            return name.Length > 5;
-        }
 
-        public static bool ExactlyFive(string name)
-        {
-            return name.Length == 5;
-        }
 
         public static List<string> NamesFilter(string[] names, Filters filter)
         {
