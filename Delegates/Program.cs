@@ -16,9 +16,14 @@ namespace Delegates
         {
             string[] names = { "Alice", "John", "Bobby", "Kyle", "Scott", "Tod", "Sharon", "Armin", "George" };
 
-            List<string> lessThanFiveChars = NamesFilter(names, item => item.Length == 5); // We dont need method, we can just use a lambda expression here!
+            List<string> lessThanFiveChars = NamesFilter(names, item => item.Length < 5); // We dont need method, we can just use a lambda expression here!
+            List<string> moreThanFiveChars = NamesFilter(names, i => i.Length > 5);
+            List<string> exactlyFiveChars = NamesFilter(names, i => i.Length == 5);
 
-            Console.WriteLine(string.Join(", ", lessThanFiveChars));
+            Console.WriteLine("Less than Five Chars: " + string.Join(", ", lessThanFiveChars));
+            Console.WriteLine("More than Five Chars: " + string.Join(", ", moreThanFiveChars));
+            Console.WriteLine("Exactly Five Chars: " + string.Join(", ", exactlyFiveChars));
+
         }
 
         // Now we have three different methods with three different conditions. Delegate should allow us to store these variables and pass them around.
