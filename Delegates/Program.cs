@@ -8,53 +8,24 @@ namespace Delegates
 {
     class Program
     {
-        public delegate bool CheckLengthOfString(string item);
-        public delegate int GetLengths(string message);
-
         static void Main(string[] args)
         {
-            CheckLengthOfString d = LessThanFive;
-            d += MoreThanFive;
-            d += ExactlyFive;
+            // Lambdas can be used with Func and Action delegates
+            // Check to see if this integer is less than 8
+            // If you use more than one input, you need to use parentheses (i,j)
+            Func<int, int, bool> checkIntegers = (i,j) => i < 8;
 
-            //Console.WriteLine(d("Message"));
+            Action printSomething = () => Console.WriteLine("Printing");
 
-            //List<bool> results = new List<bool>();
+            Action<int, int> sumOfTwoNumbers = (i, j) =>
+             {
+                 Console.WriteLine("The i number is: " + i);
+                 Console.WriteLine("The j number is: " + j);
+                 Console.WriteLine("The Sum number is: " + (int)(i + j));
 
-            //foreach (var del in d.GetInvocationList())
-            //{
-            //    results.Add((bool)del.DynamicInvoke("Message"));
-            //}
-            //Console.WriteLine(string.Join(", ", results));
+             };
 
-            GetLengths g = x => x.Length;
-            g += x => x.Length + 1;
-            g += x => x.Length + 2;
-
-            List<bool> results = GottaCatchEmAll<bool>(d, "Message");
-            Console.WriteLine(string.Join(", ", results));
-
-            List<int> lengths = GottaCatchEmAll<int>(g, "Message");
+            sumOfTwoNumbers(5, 2);
         }
-
-        public static List<T> GottaCatchEmAll<T>(Delegate del, object parameter = null)
-        {
-            List<T> result = del.GetInvocationList().Select(d =>(T)d.DynamicInvoke(parameter)).ToList();
-            return result;
-        }
-
-        public static bool LessThanFive(string name)
-        {
-            return name.Length < 5;
-        }
-        public static bool MoreThanFive(string name)
-        {
-            return name.Length > 5;
-        }
-        public static bool ExactlyFive(string name)
-        {
-            return name.Length == 5;
-        }
-
     }
 }
