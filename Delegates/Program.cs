@@ -8,40 +8,42 @@ namespace Delegates
 {
     class Program
     {
-        public delegate bool Filters(string item);
-        public delegate bool Test(string item);
+        public delegate void Printer(string message);
 
         static void Main(string[] args)
-
         {
-            string[] names = { "Alice", "John", "Bobby", "Kyle", "Scott", "Tod", "Sharon", "Armin", "George" };
+            Printer p = Print;
 
-            List<string> lessThanFiveChars = NamesFilter(names, item => item.Length < 5); // We dont need method, we can just use a lambda expression here!
-            List<string> moreThanFiveChars = NamesFilter(names, i => i.Length > 5);
-            List<string> exactlyFiveChars = NamesFilter(names, i => i.Length == 5);
+            p += Print;
+            p += PrintTwice;
+            p += Print;
+            p += PrintTwice;
+            p += Print;
 
-            Console.WriteLine("Less than Five Chars: " + string.Join(", ", lessThanFiveChars));
-            Console.WriteLine("More than Five Chars: " + string.Join(", ", moreThanFiveChars));
-            Console.WriteLine("Exactly Five Chars: " + string.Join(", ", exactlyFiveChars));
+            p("Message");
 
-        }
+            // How do we check what is on the list of the delegate chain? Use a foreach loop
 
-        // Now we have three different methods with three different conditions. Delegate should allow us to store these variables and pass them around.
-
-
-        public static List<string> NamesFilter(string[] names, Filters filter)
-        {
-            List<string> result = new List<string>();
-
-            foreach (var name in names)
+            foreach (var del in p.GetInvocationList())
             {
-                // We need a string for the input, and we return a boolean, whether it is true or false that the length is less than 5
-                if (filter(name))
-                {
-                    result.Add(name);
-                }
+                Console.WriteLine(del.Method);
             }
-            return result;
+
+
         }
+
+        public static void PrintTwice(string message)
+        {
+            Console.WriteLine(message + " 1 ");
+            Console.WriteLine(message + " 1 ");
+
+        }
+
+
+        public static void Print(string message)
+        {
+            Console.WriteLine(message);
+        }
+
     }
 }
