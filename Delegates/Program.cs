@@ -9,6 +9,7 @@ namespace Delegates
     class Program
     {
         public delegate bool CheckLengthOfString(string item);
+        public delegate int GetLengths(string message);
 
         static void Main(string[] args)
         {
@@ -26,10 +27,20 @@ namespace Delegates
             //}
             //Console.WriteLine(string.Join(", ", results));
 
-            List<bool> results = d.GetInvocationList().Select(del => (bool)del.DynamicInvoke("Message")).ToList();
+            GetLengths g = x => x.Length;
+            g += x => x.Length + 1;
+            g += x => x.Length + 2;
+
+            List<bool> results = GottaCatchEmAll<bool>(d, "Message");
             Console.WriteLine(string.Join(", ", results));
 
+            List<int> lengths = GottaCatchEmAll<int>(g, "Message");
+        }
 
+        public static List<T> GottaCatchEmAll<T>(Delegate del, object parameter = null)
+        {
+            List<T> result = del.GetInvocationList().Select(d =>(T)d.DynamicInvoke(parameter)).ToList();
+            return result;
         }
 
         public static bool LessThanFive(string name)
