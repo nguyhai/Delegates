@@ -8,41 +8,41 @@ namespace Delegates
 {
     class Program
     {
-        public delegate void Printer(string message);
+        public delegate bool CheckLengthOfString(string item);
 
         static void Main(string[] args)
         {
-            Printer p = Print;
+            CheckLengthOfString d = LessThanFive;
+            d += MoreThanFive;
+            d += ExactlyFive;
 
-            p += Print;
-            p += PrintTwice;
-            p += Print;
-            p += PrintTwice;
-            p += Print;
+            //Console.WriteLine(d("Message"));
 
-            p("Message");
+            //List<bool> results = new List<bool>();
 
-            // How do we check what is on the list of the delegate chain? Use a foreach loop
+            //foreach (var del in d.GetInvocationList())
+            //{
+            //    results.Add((bool)del.DynamicInvoke("Message"));
+            //}
+            //Console.WriteLine(string.Join(", ", results));
 
-            foreach (var del in p.GetInvocationList())
-            {
-                Console.WriteLine(del.Method);
-            }
+            List<bool> results = d.GetInvocationList().Select(del => (bool)del.DynamicInvoke("Message")).ToList();
+            Console.WriteLine(string.Join(", ", results));
 
 
         }
 
-        public static void PrintTwice(string message)
+        public static bool LessThanFive(string name)
         {
-            Console.WriteLine(message + " 1 ");
-            Console.WriteLine(message + " 1 ");
-
+            return name.Length < 5;
         }
-
-
-        public static void Print(string message)
+        public static bool MoreThanFive(string name)
         {
-            Console.WriteLine(message);
+            return name.Length > 5;
+        }
+        public static bool ExactlyFive(string name)
+        {
+            return name.Length == 5;
         }
 
     }
